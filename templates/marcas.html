@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Marcas | STREET SHOES</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="/" class="logo">STREET SHOES.</a>
+    </header>
+
+    <main class="container">
+        <h1>MARCAS DISPONIBLES</h1>
+
+        {% for marca in marcas %}
+            <a href="{{ url_for('filtrar_marca', nombre=marca) }}">
+                <button class="buy-button" style="margin-top:15px">
+                    {{ marca }}
+                </button>
+            </a>
+        {% endfor %}
+
+        <p><a href="/">Regresar al inicio</a></p>
+    </main>
+
+</body>
+</html>

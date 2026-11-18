@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ titulo }} | STREET SHOES</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- ENCABEZADO -->
+    <header class="navbar">
+
+        <button class="menu-btn" onclick="toggleMenu()">
+            ☰
+        </button>
+
+        <a href="{{ url_for('inicio') }}" class="logo">
+            STREET SHOES.
+        </a>
+
+        <nav class="nav-links">
+            <a href="{{ url_for('inicio') }}">Inicio</a>
+            <a href="{{ url_for('todos_los_tenis') }}">Colección</a>
+            <a href="{{ url_for('ofertas') }}">Ofertas</a>
+            <a href="{{ url_for('marcas') }}">Marcas</a>
+            <a href="{{ url_for('contacto') }}">Contacto</a>
+        </nav>
+
+        <div class="nav-icons">
+            <a href="{{ url_for('ver_carrito') }}" class="cart-link">
+                🛍
+                <span>Carrito</span>
+                <span class="cart-count">{{ cantidad_carrito }}</span>
+            </a>
+        </div>
+
+    </header>
+
+
+    <!-- MENU LATERAL -->
+    <nav id="sidebar" class="sidebar">
+
+        <button class="close-btn" onclick="toggleMenu()">✕</button>
+
+        <h2>STREET SHOES.</h2>
+        <p class="sidebar-subtitle">EXPLORA NUESTRA TIENDA</p>
+
+        <a href="{{ url_for('inicio') }}">🏠 Inicio</a>
+        <a href="{{ url_for('todos_los_tenis') }}">👟 Todos los tenis</a>
+        <a href="{{ url_for('ofertas') }}">🔥 Ofertas</a>
+        <a href="{{ url_for('marcas') }}">🏷️ Marcas</a>
+        <a href="{{ url_for('contacto') }}">📞 Contacto</a>
+
+        <a href="{{ url_for('ver_carrito') }}">
+            🛍 Mi carrito ({{ cantidad_carrito }})
+        </a>
+
+    </nav>
+
+    <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+
+
+    <!-- MENSAJES -->
+    <div class="messages">
+        {% with mensajes = get_flashed_messages() %}
+            {% for mensaje in mensajes %}
+                <p>{{ mensaje }}</p>
+            {% endfor %}
+        {% endwith %}
+    </div>
+
+
+    <!-- PORTADA -->
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <p class="hero-label">STREET SHOES COLLECTION</p>
+
+            <h1>
+                ENCUENTRA<br>
+                TU ESTILO.
+            </h1>
+
+            <p>Los tenis que están hechos a tu medida.</p>
+
+            <a href="{{ url_for('todos_los_tenis') }}"
+               class="hero-button">
+                DESCUBRIR COLECCIÓN
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- PRODUCTOS -->
+    <main class="container" id="productos">
+
+        <div class="section-title">
+
+            <h2>{{ titulo }}</h2>
+
+            <p>{{ subtitulo }}</p>
+
+        </div>
+
+
+        <section class="grid">
+
+            {% for p in productos %}
+
+            <article class="tarjeta">
+
+                <div class="product-image">
+
+                    <img
+                        src="{{ url_for('static', filename='img/' + p.imagen) }}"
+                        alt="{{ p.nombre }}"
+                    >
+
+                    {% if p.oferta %}
+                        <span class="offer-label">OFERTA</span>
+                    {% endif %}
+
+                </div>
+
+                <div class="product-info">
+
+                    <p class="brand-name">{{ p.marca }}</p>
+
+                    <h3>{{ p.nombre }}</h3>
+
+                    <p>Talla disponible: {{ p.talla }}</p>
+
+                    <strong>${{ "{:,.2f}".format(p.precio) }} MXN</strong>
+
+                    <form action="{{ url_for('agregar_carrito', id_producto=p.id) }}"
+                          method="POST">
+
+                        <button type="submit" class="buy-button">
+                            AGREGAR AL CARRITO +
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </article>
+
+            {% else %}
+
+                <div class="empty-products">
+                    <h2>No hay productos disponibles.</h2>
+                    <a href="{{ url_for('todos_los_tenis') }}">
+                        Ver colección completa
+                    </a>
+                </div>
+
+            {% endfor %}
+
+        </section>
+
+    </main>
+
+
+    <!-- PROMOCION -->
+    <section class="promo">
+
+        <p>STREET SHOES</p>
+
+        <h2>EL ESTILO COMIENZA<br>EN TUS PIES.</h2>
+
+        <a href="{{ url_for('marcas') }}" class="hero-button">
+            EXPLORAR MARCAS
+        </a>
+
+    </section>
+
+
+    <!-- PIE DE PAGINA -->
+    <footer>
+
+        <h2>STREET SHOES.</h2>
+
+        <p>SNEAKERS · ESTILO · PERSONALIDAD</p>
+
+        <div class="footer-links">
+
+            <a href="{{ url_for('inicio') }}">Inicio</a>
+            <a href="{{ url_for('todos_los_tenis') }}">Productos</a>
+            <a href="{{ url_for('marcas') }}">Marcas</a>
+            <a href="{{ url_for('contacto') }}">Contacto</a>
+
+        </div>
+
+        <p class="copyright">
+            © 2026 STREET SHOES. TODOS LOS DERECHOS RESERVADOS.
+        </p>
+
+    </footer>
+
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+        function toggleMenu() {
+
+            document.getElementById("sidebar")
+                .classList.toggle("active");
+
+            document.getElementById("overlay")
+                .classList.toggle("active");
+
+        }
+
+    </script>
+
+</body>
+</html>

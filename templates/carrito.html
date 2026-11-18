@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Carrito | STREET SHOES</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="/" class="logo">STREET SHOES.</a>
+        <a href="/">Seguir comprando</a>
+    </header>
+
+    <main class="container">
+
+        <h1>MI CARRITO</h1>
+
+        <p>{{ cantidad_total }} productos</p>
+
+        {% if productos %}
+
+            {% for p in productos %}
+
+                <article class="cart-item">
+
+                    <img
+                        src="{{ url_for('static', filename='img/' + p.imagen) }}"
+                        alt="{{ p.nombre }}"
+                    >
+
+                    <div class="cart-info">
+
+                        <h2>{{ p.nombre }}</h2>
+                        <p>Marca: {{ p.marca }}</p>
+                        <p>Talla: {{ p.talla }}</p>
+                        <p>Precio: ${{ p.precio }} MXN</p>
+
+                        <form action="{{ url_for('actualizar_carrito', id_producto=p.id) }}"
+                              method="POST">
+
+                            <input
+                                type="number"
+                                name="cantidad"
+                                value="{{ p.cantidad }}"
+                                min="1"
+                                max="99"
+                                required
+                            >
+
+                            <button type="submit">Actualizar</button>
+                        </form>
+
+                        <strong>Subtotal: ${{ p.subtotal }} MXN</strong>
+
+                        <form action="{{ url_for('eliminar_carrito', id_producto=p.id) }}"
+                              method="POST">
+
+                            <button type="submit" class="remove-button">
+                                ELIMINAR
+                            </button>
+                        </form>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+            <div class="cart-total">
+                <h2>TOTAL: ${{ total }} MXN</h2>
+                <p>El pago estará disponible próximamente.</p>
+            </div>
+
+        {% else %}
+
+            <div class="empty-cart">
+                <h2>Tu carrito está vacío.</h2>
+                <p>Encuentra tus próximos tenis favoritos.</p>
+
+                <a href="/tenis" class="hero-button">
+                    EXPLORAR TENIS
+                </a>
+            </div>
+
+        {% endif %}
+
+    </main>
+
+</body>
+</html>
